@@ -1,0 +1,6 @@
+colorama==0.4.3
+pynput==1.6.6
+six==1.14.0
+pyobjc-framework-Quartz==6.1
+pyobjc-core==6.1
+pyobjc-framework-Cocoa==6.1
