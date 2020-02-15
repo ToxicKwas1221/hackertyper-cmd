@@ -1,8 +1,11 @@
-import sys
+import os
+import random
+from argparse import ArgumentParser
 from pynput.keyboard import Listener, KeyCode
 from colorama import Fore, Style
 
-
+parser = ArgumentParser()
+parser.add_argument('-f', '--file', type=str, help='pick a specific file from the directory')
 speed = 4  # characters per button press
 progress = 0
 
@@ -23,16 +26,23 @@ def on_press(key):
 
 
 if __name__ == '__main__':
-    try:
-        filename = sys.argv[1]
-        with open(filename, 'r') as file:
+    args = parser.parse_args()
+    if args.file:
+        try:
+            with open(args.file, 'r') as file:
+                code = file.read()
+        except FileNotFoundError:
+            print(Fore.RED+f'File {args.file} is not found!'+Fore.RESET)
+            exit()
+    else:
+        os.chdir('pwn3r-scripts')
+        file = random.choice(os.listdir(path='.'))
+        while file == '.DS_Store':  # MacOSX compatibility
+            file = random.choice(os.listdir(path='.'))
+        with open(file, 'r') as file:
+            print(file.name)
             code = file.read()
-    except IndexError:
-        print(Fore.RED + 'Usage: python hackertyper.py <filename>' + Fore.RESET)
-        sys.exit()
-    except FileNotFoundError:
-        print(Fore.RED + 'File \'{}\' does not exist!'.format(filename) + Fore.RESET)
-        sys.exit()
+
     print(Fore.GREEN, Style.BRIGHT)
     listener = Listener(on_press=on_press, suppress=True)  # threading.Thread instance
     listener.start()
