@@ -1,11 +1,17 @@
 import os
 import random
+from platform import platform
 from argparse import ArgumentParser
 from pynput.keyboard import Listener, KeyCode
 from colorama import Fore, Style
 
+if platform().lower().startswith('windows'):
+    from colorama import init
+    init()
+
 parser = ArgumentParser()
-parser.add_argument('-f', '--file', type=str, help='pick a specific file from the directory')
+parser.add_argument('-f', '--file', help='pick a specific file from the directory')
+
 speed = 4  # characters per button press
 progress = 0
 
@@ -40,7 +46,6 @@ if __name__ == '__main__':
         while file == '.DS_Store':  # MacOSX compatibility
             file = random.choice(os.listdir(path='.'))
         with open(file, 'r') as file:
-            print(file.name)
             code = file.read()
 
     print(Fore.GREEN, Style.BRIGHT)
