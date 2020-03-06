@@ -1,13 +1,10 @@
 import os
 import random
-from platform import platform
 from argparse import ArgumentParser
-from pynput.keyboard import Listener, KeyCode
-from colorama import Fore, Style
+from pynput.keyboard import Listener, KeyCode, Key
+from colorama import Fore, Style, init
 
-if platform().lower().startswith('windows'):
-	from colorama import init
-	init()
+init()
 
 parser = ArgumentParser()
 parser.add_argument('-f', '--file', help='pick a specific file from the directory')
@@ -21,7 +18,7 @@ progress = 0
 
 def on_press(key):
 	global code, progress, speed
-	if key == KeyCode.from_char('q'):
+	if key == Key.esc:
 		return False  # Stops the listener thread
 	if '\n' in code[progress:progress+speed]:
 		print(code[progress:progress + speed], end='', flush=True)
